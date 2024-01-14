@@ -1,8 +1,6 @@
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.util.TimerTask;
-import java.util.Timer;
 
 @SuppressWarnings("serial")
 public class Frame extends JFrame implements KeyListener {
@@ -49,33 +47,45 @@ public class Frame extends JFrame implements KeyListener {
       this.add(image);
       getRootPane().setBorder(BorderFactory.createLineBorder(Color.WHITE));
       makeFrame = false;
-
-      System.out.println("frame built");
       
-      TimerTask tt = new TimerTask() {
+      Thread t1 = new Thread() {
     	  @Override
     	  public void run() {
-    		  if (down) {
-    			  Shape.checkBlockStop();
-    	          Panel.score++;
-    	          Panel.label.setText(Panel.score + "");
-    	          repaint();
-    		  }
+      		while (!Panel.GAMEOVER) {
+      			System.out.print("");
+      			if (right && canGoR()) {
+      				Shape.moveRight();
+      				try {
+      					Thread.sleep(100);
+      				} catch (InterruptedException e) {}
+      			} else if (left && canGoL()) {
+      				Shape.moveLeft();
+      				try {
+      					Thread.sleep(100);
+      				} catch (InterruptedException e) {}
+      			}
+      		}
     	  }
       };
-      new Timer().schedule(tt, 50, 50);
-      
-      TimerTask tt2 = new TimerTask() {
-    	  @Override
+      Thread t2 = new Thread() {
+    	 @Override
     	  public void run() {
-    		  if (right && canGoR()) {
-    			  Shape.moveRight();
-    		  } else if (left && canGoL()) {
-    			  Shape.moveLeft();
-    		  }
-    	  }
+    		 while (!Panel.GAMEOVER) {
+    		 	System.out.print("");
+    		 	if (down) {
+    		 		Shape.checkBlockStop();
+    		 		Panel.score++;
+    		 		Panel.label.setText(Panel.score + "");
+    		 		repaint();
+    		 		try {
+    		 			Thread.sleep(50);
+    		 		} catch (InterruptedException e) {}
+    		 	} 
+    		 }
+    	 }
       };
-      new Timer().schedule(tt2, 50, 50);
+      t1.start();
+      t2.start();
     }
   }
 
@@ -103,7 +113,7 @@ public class Frame extends JFrame implements KeyListener {
 
   @Override
   public void keyPressed(KeyEvent e) {
-    if (canPress) {
+    if (canPress && !Panel.GAMEOVER) {
       switch (e.getKeyCode()) {
         case KeyEvent.VK_LEFT: 
           left = true;
@@ -115,8 +125,7 @@ public class Frame extends JFrame implements KeyListener {
         	down = true;
           break;
         case KeyEvent.VK_UP:
-        	if (canGoR() && canGoL())
-        		Shape.rotate();
+        	Shape.rotate();
           break;
       }
     }
@@ -125,7 +134,7 @@ public class Frame extends JFrame implements KeyListener {
     int[][] bsPos = {{Shape.b1Pos[0], Shape.b1Pos[1]}, {Shape.b2Pos[0], Shape.b2Pos[1]}, {Shape.b3Pos[0], Shape.b3Pos[1]}, {Shape.b4Pos[0], Shape.b4Pos[1]}};
     for (int i = 0; i < 4; i++) {
       try {
-        if (Shape.blocks[bsPos[i][0]+1][bsPos[i][1]].type != 0 && !findEqual(bsPos[i][0]+1, bsPos[i][1], bsPos)) {
+        if (Shape.blocks[bsPos[i][0]+1][bsPos[i][1]].getType() != 0 && !findEqual(bsPos[i][0]+1, bsPos[i][1], bsPos)) {
           return false;
         }
       } catch (Exception e) {
@@ -146,7 +155,7 @@ public class Frame extends JFrame implements KeyListener {
     int[][] bsPos = {{Shape.b1Pos[0], Shape.b1Pos[1]}, {Shape.b2Pos[0], Shape.b2Pos[1]}, {Shape.b3Pos[0], Shape.b3Pos[1]}, {Shape.b4Pos[0], Shape.b4Pos[1]}};
     for (int i = 0; i < 4; i++) {
       try {
-        if (Shape.blocks[bsPos[i][0]-1][bsPos[i][1]].type != 0 && !findEqual(bsPos[i][0]-1, bsPos[i][1], bsPos)) {
+        if (Shape.blocks[bsPos[i][0]-1][bsPos[i][1]].getType() != 0 && !findEqual(bsPos[i][0]-1, bsPos[i][1], bsPos)) {
           return false;
         }
       } catch (Exception e) {

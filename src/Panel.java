@@ -16,7 +16,7 @@ public class Panel extends JPanel implements MouseListener {
   static JLabel TFLabel;
 
   public boolean LBScreen = true;
-  public static String name;
+  private static String name;
   public static int score = 0;
   static boolean makePanel = true;
   public static boolean GAMEOVER = false;
@@ -46,7 +46,7 @@ public class Panel extends JPanel implements MouseListener {
       textField.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           if (textField.getText().length() != 0 && textField.getText().length() <= 10) {
-            name = textField.getText();
+            name = textField.getText().replaceAll(" ", "_");
             makeTLayout();
           }
         }
@@ -81,6 +81,19 @@ public class Panel extends JPanel implements MouseListener {
   
     new Shape();
     Frame.canPress = true;
+  }
+  
+  public void gameover() {
+	  GAMEOVER = true;
+	  Frame.right = false;
+	  Frame.left = false;
+	  Frame.down = false;
+	  
+	  TFLabel.setBounds(65, 150, 200, 200);
+	  TFLabel.setText("<html>GAME<br>OVER<html>");
+      TFLabel.setFont(new Font("Courier", Font.BOLD, 40));
+      
+      HighScore.setScore(score, name);
   }
 
   @Override

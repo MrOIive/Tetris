@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class HighScore {
   //since the score can only be in the one thousands so 4 digits
-  final static int MAX_NUM_SIZE = 4;
+  final static int MAX_NUM_SIZE = 5;
   final static int MAX_STR_SIZE = 10;
   final static int INDEX_OF_NUMS = (10 + MAX_NUM_SIZE);
 
@@ -25,7 +25,7 @@ public class HighScore {
         String lineNum = line.substring(10, INDEX_OF_NUMS);
         //lineNum = lineNum.replaceAll(" ", "<&nbsp<");
         //5 spaces, also if count equals 10 then it will a delete a space in between the numbering and the scores to make it look cleaner
-        String space = "<&nbsp<<&nbsp<<&nbsp<<&nbsp< ";
+        String space = "<&nbsp<<&nbsp<<&nbsp<<&nbsp<<&nbsp< ";
         if (count == 10)
           str = count + ". " + lineNum.replaceAll(" ", "<&nbsp<") + space + name.replaceAll(" ", "<&nbsp<") + space + date;
         else
@@ -53,7 +53,7 @@ public class HighScore {
         //indexOf return -1 if it cant find the char
         if (io == -1)
           io = MAX_NUM_SIZE;
-        //finding the nuber inside of the substring to pull out the number with the spaces
+        //finding the number inside of the substring to pull out the number with the spaces
         lineNum = Integer.valueOf(beforeLn.substring(0, io));
         if (lineNum > hs || placedIt)
           list.add(list.size(), line);
@@ -79,13 +79,20 @@ public class HighScore {
         }
       }
       if (!placedIt) {
-        int numDigits = String.valueOf(hs).length();
+        int numDigits = (MAX_NUM_SIZE - String.valueOf(hs).length());
         String blnks = "";
         for (int i = 0; i < numDigits; i++) {
           blnks += " ";
         }
+        
+        int namDigits = (MAX_STR_SIZE - name.length());
+        String blnksNam = "";
+        for (int i = 0; i < namDigits; i++) {
+          blnksNam += " ";
+        }
+        
         String date = String.valueOf(java.time.LocalDate.now());
-        String str = date + hs + blnks + name;
+        String str = date + hs + blnks + name + blnksNam;
         list.add(list.size(), str);
       }
       in.close();

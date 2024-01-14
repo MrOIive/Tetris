@@ -1,7 +1,7 @@
 import java.awt.*;
 
 public class Block {
-  public int type;
+  private int type;
   public Color color;
   public int x;
   public int y;
@@ -32,5 +32,9 @@ public class Block {
     } else {
       color = Color.black;
     }
+  }
+  
+  public int getType() {
+	  return type;
   }
 }
