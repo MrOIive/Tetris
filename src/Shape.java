@@ -57,8 +57,16 @@ public class Shape {
   }
 
   public static void checkBlockStop() {
+	Frame.canPress = false;
+	boolean down = Frame.down;
+	boolean left = Frame.left;
+	boolean right = Frame.right;
+	
+	Frame.down = false;
+	Frame.left = false;
+	Frame.right = false;
+	
     if (blockStop()) {
-      Frame.canPress = false;
       if (aboveLine()) {
     	  Frame.panel.gameover();
     	  return;
@@ -86,18 +94,21 @@ public class Shape {
       Panel.score += 10;
       Panel.label.setText(Panel.score + "");
       randomizeBlock();
-      Frame.canPress = true;
     } else {
       moveDown();
     }
+    Frame.canPress = true;
+    Frame.down = down;
+	Frame.left = left;
+	Frame.right = right;
   }
-
-  public static void moveDown() {	
-    blocks[b1Pos[0]][b1Pos[1]].setType(EMPTY);  
-    blocks[b2Pos[0]][b2Pos[1]].setType(EMPTY); 
-    blocks[b3Pos[0]][b3Pos[1]].setType(EMPTY);   
+  
+  public synchronized static void moveDown() {
+	blocks[b1Pos[0]][b1Pos[1]].setType(EMPTY);
+	blocks[b2Pos[0]][b2Pos[1]].setType(EMPTY);
+	blocks[b3Pos[0]][b3Pos[1]].setType(EMPTY);
     blocks[b4Pos[0]][b4Pos[1]].setType(EMPTY);
- 
+
     b1Pos[1]++;
     blocks[b1Pos[0]][b1Pos[1]].setType(shape);
     
@@ -112,11 +123,11 @@ public class Shape {
   }
 
   public static void moveLeft() {
-    blocks[b1Pos[0]][b1Pos[1]].setType(EMPTY);
-    blocks[b2Pos[0]][b2Pos[1]].setType(EMPTY);
-    blocks[b3Pos[0]][b3Pos[1]].setType(EMPTY);
-    blocks[b4Pos[0]][b4Pos[1]].setType(EMPTY);
-
+	blocks[b1Pos[0]][b1Pos[1]].setType(EMPTY);
+	blocks[b2Pos[0]][b2Pos[1]].setType(EMPTY);
+	blocks[b3Pos[0]][b3Pos[1]].setType(EMPTY);
+	blocks[b4Pos[0]][b4Pos[1]].setType(EMPTY);
+	
     b1Pos[0]--;
     blocks[b1Pos[0]][b1Pos[1]].setType(shape);
 
@@ -132,11 +143,11 @@ public class Shape {
   }
 
   public static void moveRight() {
-    blocks[b1Pos[0]][b1Pos[1]].setType(EMPTY);
-    blocks[b2Pos[0]][b2Pos[1]].setType(EMPTY);
-    blocks[b3Pos[0]][b3Pos[1]].setType(EMPTY);
-    blocks[b4Pos[0]][b4Pos[1]].setType(EMPTY);
-    
+	blocks[b1Pos[0]][b1Pos[1]].setType(EMPTY);
+	blocks[b2Pos[0]][b2Pos[1]].setType(EMPTY);
+	blocks[b3Pos[0]][b3Pos[1]].setType(EMPTY);
+	blocks[b4Pos[0]][b4Pos[1]].setType(EMPTY);
+	  
     b1Pos[0]++;
     blocks[b1Pos[0]][b1Pos[1]].setType(shape);
 
@@ -150,7 +161,7 @@ public class Shape {
     blocks[b4Pos[0]][b4Pos[1]].setType(shape);
     Frame.panel.redrawWindow();
   }
-  static void rotate() { 
+  static void rotate() {
 	  	int[][] bsPos = {{b1Pos[0], b1Pos[1]}, {b2Pos[0], b2Pos[1]}, {b3Pos[0], b3Pos[1]}, {b4Pos[0], b4Pos[1]}}; 
 	  	blocks[b1Pos[0]][b1Pos[1]].setType(EMPTY);
 	  	blocks[b2Pos[0]][b2Pos[1]].setType(EMPTY);
@@ -241,6 +252,7 @@ public class Shape {
   }
 
  static void randomizeBlock() {
+	 
     Random r = new Random();
     shape = (r.nextInt(7) + 1);
 
@@ -254,8 +266,9 @@ public class Shape {
       b2Pos[1] = 0;
       b3Pos[1] = 0;
       b4Pos[1] = 0;
-      
+      // L Shape
     } else if(shape == 2) {
+    	
       b1Pos[0] = 4;
       b2Pos[0] = 4;
       b3Pos[0] = 5;
@@ -306,6 +319,7 @@ public class Shape {
       b3Pos[1] = 1;
       b4Pos[1] = 1;
     } else {
+    	
       b1Pos[0] = 4;
       b2Pos[0] = 5;
       b3Pos[0] = 5;

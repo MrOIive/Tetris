@@ -78,7 +78,7 @@ public class Frame extends JFrame implements KeyListener {
     		 		Panel.label.setText(Panel.score + "");
     		 		repaint();
     		 		try {
-    		 			Thread.sleep(50);
+    		 			Thread.sleep(40);
     		 		} catch (InterruptedException e) {}
     		 	} 
     		 }
